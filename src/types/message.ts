@@ -54,4 +54,5 @@ export interface ChatBubbleProps {
   isSelectable?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
+  isSearchBot?: boolean;
 }

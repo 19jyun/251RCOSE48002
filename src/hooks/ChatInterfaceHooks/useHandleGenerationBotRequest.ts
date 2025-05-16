@@ -52,20 +52,24 @@ export const useHandleGenerationBotRequest = (
       });
     }
 
-    const result = await generateDocument({
-      chatroom_id: Number(chatRoomId),
-      first_msg_id,
-      last_msg_id,
-      user_query: query,
-      topic_id,
-    });
-
-    console.log("Document generation result:", result);
-
+    setGenerationBotTriggered(false);
     setSelectedMessageIds([]);
 
+    try {
+      const result = await generateDocument({
+        chatroom_id: Number(chatRoomId),
+        first_msg_id,
+        last_msg_id,
+        user_query: query,
+        topic_id,
+      });
+      console.log("Document generated successfully:", result);
+    } catch (error) {
+      console.error("Error generating document:", error);
+      alert("문서 생성에 실패했습니다.");
+    }
+
     resetSelection();
-    setGenerationBotTriggered(false);
     setQueryText(null);
   }, [selectedMessageIds, chatRoomId, currentUser, query, team, peer]);
 

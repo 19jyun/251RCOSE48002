@@ -65,7 +65,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     setGenerationBotTriggered,
     setQueryText,
     setSearchPending,
-    isSearchBot
   );
 
   const handleGenerationBotRequest = useHandleGenerationBotRequest(
@@ -116,7 +115,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
                   setSelectedMessageIds([...selectedMessageIds, Number(msg.id)]);
                 }
               }}
-
+              isSearchBot={isSearchBot}
             />
           );
         })}
