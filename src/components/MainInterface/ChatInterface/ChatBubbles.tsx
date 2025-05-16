@@ -5,12 +5,12 @@ import { formatTimestamp } from "../../../utils/ChatInterfaceUtils/dateUtils";
 
 const defaultProfileImage = "/maleprofile.png";
 
-const getSenderName = (sender: ChatBubbleProps["sender"]) => {
+const getSenderName = (sender: ChatBubbleProps["message"]["sender"]) => {
   return [sender.first_name, sender.last_name].filter(Boolean).join(" ");
 };
 
 const ProfileImage: React.FC<{
-  sender: ChatBubbleProps["sender"];
+  sender: ChatBubbleProps["message"]["sender"];
   onClick?: () => void;
 }> = ({ sender, onClick }) => (
   <div className="chat-bubble-profile" onClick={onClick}>
@@ -20,7 +20,6 @@ const ProfileImage: React.FC<{
 
 const BubbleContent: React.FC<ChatBubbleProps & { name: string }> = ({
   message,
-  timestamp,
   isCurrentUser,
   showProfile,
   isSelectable,
@@ -40,9 +39,9 @@ const BubbleContent: React.FC<ChatBubbleProps & { name: string }> = ({
         {(!isCurrentUser && showProfile) && (
           <div className="chat-bubble-sender">{name}</div>
         )}
-        <div className="chat-bubble-message">{message}</div>
-        {timestamp && (
-          <div className="chat-bubble-timestamp">{formatTimestamp(timestamp)}</div>
+        <div className="chat-bubble-message">{message.text}</div>
+        {message.timestamp && (
+          <div className="chat-bubble-timestamp">{formatTimestamp(message.timestamp)}</div>
         )}
       </div>
     </div>
@@ -51,40 +50,43 @@ const BubbleContent: React.FC<ChatBubbleProps & { name: string }> = ({
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({
   message,
-  sender,
-  timestamp,
   isCurrentUser,
   showProfile,
   onProfileClick,
   isSelectable,
   isSelected,
   onSelect,
+  isSearchBot,
 }) => {
-  const name = getSenderName(sender);
+  const name = getSenderName(message.sender);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    const data = { message, sender, timestamp };
+    const data = {
+      type: "shared_message",
+      message: message.text,
+      sender: message.sender,
+      timestamp: message.timestamp,
+      shared_message_id: message.id ?? null,
+    };
     e.dataTransfer.setData("application/json", JSON.stringify(data));
   };
 
   const handleProfileClick = () => {
-    if (onProfileClick) onProfileClick(sender);
+    if (onProfileClick) onProfileClick(message.sender);
   };
 
   return (
     <div
       className={`chat-bubble-wrapper ${isCurrentUser ? "align-right" : "align-left"}`}
-      draggable={sender.id === "search-bot"}
+      draggable={message.sender.id === "search-bot"}
       onDragStart={handleDragStart}
     >
       {showProfile && !isCurrentUser && (
-        <ProfileImage sender={sender} onClick={handleProfileClick} />
+        <ProfileImage sender={message.sender} onClick={handleProfileClick} />
       )}
       <BubbleContent
         {...{
           message,
-          sender,
-          timestamp,
           isCurrentUser,
           showProfile,
           isSelectable,

@@ -44,12 +44,9 @@ interface MentionData {
 }
 
 export interface ChatBubbleProps {
-  message: string;
-  sender: Sender;
-  timestamp?: string;
+  message: Message;
   isCurrentUser: boolean;
   showProfile: boolean;
-  mentions?: Mention[];
   onProfileClick?: (sender: Sender) => void;
   isSelectable?: boolean;
   isSelected?: boolean;

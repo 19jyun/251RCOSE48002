@@ -100,12 +100,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
           return (
             <ChatBubble
               key={msg.id}
-              message={msg.text}
-              sender={msg.sender}
-              timestamp={msg.timestamp}
+              message={msg}
               isCurrentUser={msg.sender.id === currentUser!.id}
               showProfile={showProfile}
-              mentions={msg.mentions}
               isSelectable={generationBotTriggered}
               isSelected={selectedMessageIds.includes(Number(msg.id))}
               onSelect={() => {
