@@ -43,6 +43,17 @@ interface MentionData {
   display: string;
 }
 
+export interface SharedMessageInfo {
+  text: string;
+  sender: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    profile_image?: string;
+  };
+  id?: string;
+}
+
 export interface ChatBubbleProps {
   message: Message;
   isCurrentUser: boolean;
@@ -51,5 +62,4 @@ export interface ChatBubbleProps {
   isSelectable?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
-  isSearchBot?: boolean;
 }

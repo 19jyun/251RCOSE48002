@@ -39,7 +39,16 @@ const BubbleContent: React.FC<ChatBubbleProps & { name: string }> = ({
         {(!isCurrentUser && showProfile) && (
           <div className="chat-bubble-sender">{name}</div>
         )}
-        <div className="chat-bubble-message">{message.text}</div>
+        {message.type === "shared" && message.shared_message_sender ? (
+          <div className="chat-bubble-shared-info">
+            <div className="shared-sender-name">
+              👤 {message.shared_message_sender.first_name} {message.shared_message_sender.last_name} 님이 공유한 메시지:
+            </div>
+            <blockquote className="shared-message-text">"{message.text}"</blockquote>
+          </div>
+        ) : (
+          <div className="chat-bubble-message">{message.text}</div>
+        )}
         {message.timestamp && (
           <div className="chat-bubble-timestamp">{formatTimestamp(message.timestamp)}</div>
         )}
@@ -56,7 +65,6 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
   isSelectable,
   isSelected,
   onSelect,
-  isSearchBot,
 }) => {
   const name = getSenderName(message.sender);
 
